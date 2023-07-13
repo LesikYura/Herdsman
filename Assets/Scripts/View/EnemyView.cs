@@ -1,3 +1,4 @@
+using Data;
 using UnityEngine;
 
 namespace View
@@ -51,12 +52,5 @@ namespace View
                 }
             }
         }
-    }
-
-    public enum EnemyState
-    {
-        Ready = 0,
-        Move,
-        Delivered
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Data;
 using UnityEngine;
 using View;
 using Random = UnityEngine.Random;
@@ -103,11 +104,4 @@ public class GamePlayController : MonoBehaviour
             _gameState = GameState.Pause;
         }
     }
-}
-
-public enum GameState
-{
-    Loading = 0,
-    Play,
-    Pause
 }
