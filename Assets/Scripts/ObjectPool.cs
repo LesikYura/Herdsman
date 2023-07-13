@@ -3,10 +3,15 @@ using UnityEngine;
 
 public class ObjectPool
 {
+    /// <summary>
+    /// Object pool
+    /// Get and return enemies
+    /// </summary>
+    
     private GameObject _prefab;
     private List<GameObject> _objectPool;
     private Transform _parent;
-
+    
     public ObjectPool(GameObject view, int poolSize, Transform parent)
     {
         _prefab = view;

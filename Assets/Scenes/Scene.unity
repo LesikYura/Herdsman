@@ -689,6 +689,7 @@ MonoBehaviour:
   _fieldController: {fileID: 1303471512}
   _yardManager: {fileID: 209030553}
   _hudManager: {fileID: 1060921817}
+  _config: {fileID: 11400000, guid: baca508cc518b46748e7e975437aa2cb, type: 2}
 --- !u!4 &1157341462
 Transform:
   m_ObjectHideFlags: 0

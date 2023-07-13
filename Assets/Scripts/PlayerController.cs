@@ -37,10 +37,8 @@ public class PlayerController : Movable
                 {
                     view.SetMoveData(_collectedEnemies.Count <= 0 ? transform : _collectedEnemies[^1].transform);
                     _collectedEnemies.Add(view);
-                    Debug.Log($"Connect # {view.Index}");
                 }
             }
         }
     }
-
 }

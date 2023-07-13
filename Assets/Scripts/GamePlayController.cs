@@ -23,6 +23,7 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private FieldController _fieldController;
     [SerializeField] private YardManager _yardManager;
     [SerializeField] private HUDManager _hudManager;
+    [SerializeField] private GamePlayConfig _config;
     
     private PlayerController _playerController;
     private ObjectPool _objectPool;
@@ -31,11 +32,11 @@ public class GamePlayController : MonoBehaviour
     private int _enemiesDeliveredCount;
 
     private GameState _gameState;
-
-    // todo move to config
+    
+    /*// todo move to config
     private readonly int _minEnemyCount = 5;
     private readonly int _maxEnemyCount = 15;
-    private readonly int _maxCollectEnemyCount = 5;
+    private readonly int _maxCollectEnemyCount = 5;*/
     public void StartGame()
     {
         _gameState = GameState.Loading;
@@ -49,7 +50,7 @@ public class GamePlayController : MonoBehaviour
         _gameState = GameState.Play;
     }
 
-    public void NextLevel()
+    private void NextLevel()
     {
         CheckCompleteLevel();
         _yardManager.CheckCompleteLevel(GetObjectPool());
@@ -80,7 +81,7 @@ public class GamePlayController : MonoBehaviour
             _playerController = player.GetComponent<PlayerController>();
         }
 
-        _playerController.SetData(_maxCollectEnemyCount);
+        _playerController.SetData(_config.maxCollectEnemyCount);
     }
 
     private void CreateField()
@@ -92,7 +93,7 @@ public class GamePlayController : MonoBehaviour
     private void CreateEnemy()
     {
         _enemiesDeliveredCount = 0;
-        _enemiesCount = Random.Range(_minEnemyCount, _maxEnemyCount);
+        _enemiesCount = Random.Range(_config.minEnemyCount, _config.maxEnemyCount);
         for (var i = 0; i < _enemiesCount; i++)
         {
             var enemy = _objectPool.GetObjectFromPool();
@@ -122,8 +123,6 @@ public class GamePlayController : MonoBehaviour
         CheckEndGame();
     }
 
-    private ObjectPool GetObjectPool() => _objectPool ?? new ObjectPool(_enemyPrefab, _maxEnemyCount, _playerAndEnemyRoot);
-
     private void CheckEndGame()
     {
         if (_enemiesCount == _enemiesDeliveredCount)
@@ -132,4 +131,6 @@ public class GamePlayController : MonoBehaviour
             _gameState = GameState.End;
         }
     }
+    
+    private ObjectPool GetObjectPool() => _objectPool ?? new ObjectPool(_enemyPrefab, _config.maxEnemyCount, _playerAndEnemyRoot);
 }
