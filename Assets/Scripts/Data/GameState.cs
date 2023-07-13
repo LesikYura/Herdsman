@@ -4,6 +4,6 @@ namespace Data
     {
         Loading = 0,
         Play,
-        Pause
+        End
     }
 }

@@ -3,28 +3,19 @@ using Data;
 using UnityEngine;
 using View;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Movable
 {
     /// <summary>
     /// 
     /// </summary>
     
-    private Vector3 _targetPosition;
-    private bool _isMoving = false;
     private List<EnemyView> _collectedEnemies = new List<EnemyView>();
-    
-    private readonly float _moveSpeed = 2f;
-    private readonly int _maxCollectEnemyCount = 5;
+    private int _maxCollectEnemyCount;
 
-    public void SetData()
+    public void SetData(int maxCollectEnemyCount)
     {
+        _maxCollectEnemyCount = maxCollectEnemyCount;
         transform.localPosition = Vector3.zero;
-    }
-
-    public void Move(Vector3 targetPosition)
-    {
-        _targetPosition = targetPosition;
-        _isMoving = true;
     }
 
     public void EnemyDelivered(EnemyView view)
@@ -32,18 +23,6 @@ public class PlayerController : MonoBehaviour
         if (_collectedEnemies.Contains(view))
         {
             _collectedEnemies.Remove(view);
-        }
-    }
-
-    private void Update()
-    {
-        if (_isMoving)
-        {
-            transform.position = Vector3.Lerp(transform.position, _targetPosition, _moveSpeed * Time.deltaTime);
-            if (Vector3.Distance(transform.position, _targetPosition) < 0.1f)
-            {
-                _isMoving = false;
-            }
         }
     }
 
@@ -56,10 +35,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (!_collectedEnemies.Contains(view))
                 {
-                    view.Move(_collectedEnemies.Count <= 0 ? transform : _collectedEnemies[^1].transform);
+                    view.SetMoveData(_collectedEnemies.Count <= 0 ? transform : _collectedEnemies[^1].transform);
                     _collectedEnemies.Add(view);
                 }
             }
         }
     }
+
 }

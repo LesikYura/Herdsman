@@ -42,7 +42,7 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
             var ray = _mainCamera.ScreenPointToRay(eventData.position);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                _player.Move(hit.point);
+                _player.SetMoveData(hit.point);
             }
         }
     }

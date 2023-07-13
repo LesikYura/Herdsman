@@ -26,13 +26,15 @@ public class GamePlayController : MonoBehaviour
     
     private PlayerController _playerController;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
-    private GameState _gameState;
     private int _enemiesCount;
     private int _enemiesDeliveredCount;
+
+    private GameState _gameState;
 
     // todo move to config
     private readonly int _minEnemyCount = 5;
     private readonly int _maxEnemyCount = 15;
+    private readonly int _maxCollectEnemyCount = 5;
     public void StartGame()
     {
         _gameState = GameState.Loading;
@@ -54,7 +56,7 @@ public class GamePlayController : MonoBehaviour
     {
         var player = Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity, _playerAndEnemyRoot);
         _playerController = player.GetComponent<PlayerController>();
-        _playerController.SetData();
+        _playerController.SetData(_maxCollectEnemyCount);
     }
 
     private void CreateField()
@@ -101,7 +103,7 @@ public class GamePlayController : MonoBehaviour
         if (_enemiesCount == _enemiesDeliveredCount)
         {
             OnGameEnd?.Invoke();
-            _gameState = GameState.Pause;
+            _gameState = GameState.End;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace View
 {
-    public class EnemyView : MonoBehaviour
+    public class EnemyView : Movable
     {
         /// <summary>
         /// Enemy view
@@ -15,8 +15,7 @@ namespace View
         [SerializeField] private int _index;
 
         private CircleCollider2D _collider;
-        private Transform _target;
-        private readonly float _moveSpeed = 2f;
+
         private readonly float _distance = 0.5f;
 
         public int Index => _index;
@@ -28,27 +27,27 @@ namespace View
             State = EnemyState.Ready;
         }
 
-        public void Move(Transform targetPosition)
+        public override void SetMoveData(Transform targetTransform)
         {
-            _target = targetPosition;
+            base.SetMoveData(targetTransform);
             State = EnemyState.Move;
         }
 
-        public void SetAsDelivered(Transform targetPosition)
+        public void SetAsDelivered(Transform targetTransform)
         {
-            _target = targetPosition;
+            TargetTransform = targetTransform;
             State = EnemyState.Delivered;
         }
-        
-        private void Update()
+
+        protected override void Move()
         {
-            if (_target != null)
+            if (State != EnemyState.Ready)
             {
-                var offset = transform.position - _target.position;
+                var offset = transform.position - TargetTransform.position;
                 var distance = offset.magnitude;
                 if (distance > _distance)
                 {
-                    transform.position = Vector3.Lerp(transform.position, _target.position, _moveSpeed * Time.deltaTime);
+                    transform.position = Vector3.Lerp(transform.position, TargetTransform.position, MoveSpeed * Time.deltaTime);
                 }
             }
         }
