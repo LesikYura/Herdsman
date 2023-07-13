@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using View;
 
@@ -32,21 +31,6 @@ public class PlayerController : MonoBehaviour
         if (_collectedEnemies.Contains(view))
         {
             _collectedEnemies.Remove(view);
-            UpdateCollectedEnemies();
-
-            Debug.Log($"YardManager view #{view.Index}");
-        }
-    }
-
-    private void UpdateCollectedEnemies()
-    {
-        for (int i = _collectedEnemies.Count - 1; i >= 0; i--)
-        {
-            var enemy = _collectedEnemies[i];
-            if (enemy != null)
-            {
-                enemy.Move(i == 0 ? transform : _collectedEnemies[i].transform);
-            }
         }
     }
 

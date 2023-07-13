@@ -16,6 +16,7 @@ namespace View
         private CircleCollider2D _collider;
         private Transform _target;
         private readonly float _moveSpeed = 2f;
+        private readonly float _distance = 0.5f;
 
         public int Index => _index;
         
@@ -44,7 +45,7 @@ namespace View
             {
                 var offset = transform.position - _target.position;
                 var distance = offset.magnitude;
-                if (distance > 1)
+                if (distance > _distance)
                 {
                     transform.position = Vector3.Lerp(transform.position, _target.position, _moveSpeed * Time.deltaTime);
                 }

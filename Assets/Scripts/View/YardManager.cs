@@ -24,14 +24,11 @@ namespace View
                 if (view != null)
                 {
                     _deliveredEnemies.Add(view);
-                    // view.Move(_deliveredEnemies.Count <= 0 ? _deliveredRoot : _deliveredEnemies[^1].transform);
                     view.SetAsDelivered(_deliveredRoot);
                     OnTriggerEnter?.Invoke(view);
                     Debug.Log($"YardManager view #{view.Index}");
                 }
             }
-            
-            Debug.Log($"OnTriggerEnter2D {colider.gameObject.name}");
         }
     }
 }
