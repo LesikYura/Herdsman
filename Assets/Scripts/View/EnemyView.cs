@@ -1,6 +1,7 @@
 using System;
 using Data;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace View
 {
@@ -13,15 +14,12 @@ namespace View
 
         public EnemyState State { get; private set; }
 
-        [SerializeField] private int _index;
         private Action _onComplete;
+        private Vector3 _previousPosition;
         private readonly float _distance = 0.5f;
 
-        public int Index => _index;
-        
-        public void SetData(int index, Vector2 startPosition)
+        public void SetData(Vector2 startPosition)
         {
-            _index = index;
             transform.localPosition = startPosition;
             State = EnemyState.Ready;
         }
@@ -47,7 +45,12 @@ namespace View
                 var distance = offset.magnitude;
                 if (distance > _distance)
                 {
-                    transform.position = Vector3.Lerp(transform.position, TargetTransform.position, MoveSpeed * Time.deltaTime);
+                    transform.position = Vector3.Lerp(
+                        transform.position, 
+                        TargetTransform.position, 
+                        MoveSpeed * Time.deltaTime);
+                    
+                    icon.transform.localScale = new Vector3(offset.x < 0 ? -1 : 1, 1, 1);
                 }
                 else
                 {

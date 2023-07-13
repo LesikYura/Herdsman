@@ -98,7 +98,7 @@ public class GamePlayController : MonoBehaviour
         {
             var enemy = _objectPool.GetObjectFromPool();
             var enemyView = enemy.GetComponent<EnemyView>();
-            enemyView.SetData(i, _fieldController.GetSpawnPosition());
+            enemyView.SetData(_fieldController.GetSpawnPosition());
             
             _enemyViews.Add(enemyView);
         }
