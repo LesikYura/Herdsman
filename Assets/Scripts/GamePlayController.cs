@@ -15,7 +15,7 @@ public class GamePlayController : MonoBehaviour
     /// Check end game
     /// </summary>
 
-    public Action OnGameEnd;
+    public Action onGameEnd;
 
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _enemyPrefab;
@@ -25,6 +25,7 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private HUDManager _hudManager;
     
     private PlayerController _playerController;
+    private ObjectPool _objectPool;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
     private int _enemiesCount;
     private int _enemiesDeliveredCount;
@@ -38,6 +39,7 @@ public class GamePlayController : MonoBehaviour
     public void StartGame()
     {
         _gameState = GameState.Loading;
+        _objectPool = GetObjectPool();
         
         CreatePlayer();
         CreateField();
@@ -47,22 +49,44 @@ public class GamePlayController : MonoBehaviour
         _gameState = GameState.Play;
     }
 
+    public void NextLevel()
+    {
+        CheckCompleteLevel();
+        _yardManager.CheckCompleteLevel(GetObjectPool());
+        StartGame();
+    }
+
+    private void CheckCompleteLevel()
+    {
+        _objectPool = GetObjectPool();
+        foreach (var view in _enemyViews)
+        {
+            _objectPool.ReturnObjectToPool(view.gameObject);
+        }
+        
+        _enemyViews.Clear();
+    }
+
     private void SetHUDManager()
     {
-        _hudManager.SetData(_enemiesCount);
+        _hudManager.SetData(_enemiesCount, NextLevel);
     }
 
     private void CreatePlayer()
     {
-        var player = Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity, _playerAndEnemyRoot);
-        _playerController = player.GetComponent<PlayerController>();
+        if (_playerController == null)
+        {
+            var player = Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity, _playerAndEnemyRoot);
+            _playerController = player.GetComponent<PlayerController>();
+        }
+
         _playerController.SetData(_maxCollectEnemyCount);
     }
 
     private void CreateField()
     {
         _fieldController.CreateField(Camera.main, _playerController);
-        _yardManager.SetData(EnemyDelivered);
+        _yardManager.SetData(EnemyDelivered, _objectPool);
     }
 
     private void CreateEnemy()
@@ -71,7 +95,7 @@ public class GamePlayController : MonoBehaviour
         _enemiesCount = Random.Range(_minEnemyCount, _maxEnemyCount);
         for (var i = 0; i < _enemiesCount; i++)
         {
-            var enemy = Instantiate(_enemyPrefab, Vector3.zero, Quaternion.identity, _playerAndEnemyRoot);
+            var enemy = _objectPool.GetObjectFromPool();
             var enemyView = enemy.GetComponent<EnemyView>();
             enemyView.SetData(i, _fieldController.GetSpawnPosition());
             
@@ -98,11 +122,13 @@ public class GamePlayController : MonoBehaviour
         CheckEndGame();
     }
 
+    private ObjectPool GetObjectPool() => _objectPool ?? new ObjectPool(_enemyPrefab, _maxEnemyCount, _playerAndEnemyRoot);
+
     private void CheckEndGame()
     {
         if (_enemiesCount == _enemiesDeliveredCount)
         {
-            OnGameEnd?.Invoke();
+            onGameEnd?.Invoke();
             _gameState = GameState.End;
         }
     }

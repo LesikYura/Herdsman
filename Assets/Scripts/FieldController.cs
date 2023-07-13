@@ -46,7 +46,7 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
             }
         }
     }
-    
+
     private void SetBounds()
     {
         var fieldSize = _canvasScaler.referenceResolution;

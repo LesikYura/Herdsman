@@ -4,6 +4,7 @@ namespace Data
     {
         Ready = 0,
         Move,
+        MoveToSafeArea,
         Delivered
     }
 }

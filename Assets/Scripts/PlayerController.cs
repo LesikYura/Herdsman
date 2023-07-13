@@ -31,12 +31,13 @@ public class PlayerController : Movable
         if (_collectedEnemies.Count < _maxCollectEnemyCount && colider.gameObject.CompareTag("Enemy"))
         {
             var view = colider.gameObject.GetComponent<EnemyView>();
-            if (view != null && view.State != EnemyState.Delivered)
+            if (view != null && view.State != EnemyState.Delivered && view.State != EnemyState.MoveToSafeArea)
             {
                 if (!_collectedEnemies.Contains(view))
                 {
                     view.SetMoveData(_collectedEnemies.Count <= 0 ? transform : _collectedEnemies[^1].transform);
                     _collectedEnemies.Add(view);
+                    Debug.Log($"Connect # {view.Index}");
                 }
             }
         }

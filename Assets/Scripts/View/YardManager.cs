@@ -10,10 +10,22 @@ namespace View
 
         [SerializeField] private Transform _deliveredRoot;
         private List<EnemyView> _deliveredEnemies = new List<EnemyView>();
+        private ObjectPool _objectPool;
 
-        public void SetData(Action<EnemyView> onTriggerEnter)
+        public void SetData(Action<EnemyView> onTriggerEnter, ObjectPool objectPool)
         {
             OnTriggerEnter = onTriggerEnter;
+            _objectPool = objectPool;
+        }
+        
+        public void CheckCompleteLevel(ObjectPool objectPool)
+        {
+            foreach (var view in _deliveredEnemies)
+            {
+                objectPool.ReturnObjectToPool(view.gameObject);
+            }
+        
+            _deliveredEnemies.Clear();
         }
         
         private void OnTriggerEnter2D(Collider2D colider)
@@ -24,9 +36,13 @@ namespace View
                 if (view != null)
                 {
                     _deliveredEnemies.Add(view);
-                    view.SetAsDelivered(_deliveredRoot);
+                    view.SetAsDelivered(_deliveredRoot, () =>
+                    {
+                        _deliveredEnemies.Remove(view);
+                        _objectPool.ReturnObjectToPool(view.gameObject);
+                    });
+                    
                     OnTriggerEnter?.Invoke(view);
-                    Debug.Log($"YardManager view #{view.Index}");
                 }
             }
         }
