@@ -6,6 +6,11 @@ namespace View
 {
     public class YardManager : MonoBehaviour
     {
+        /// <summary>
+        /// FieldController helper
+        /// Сhecks the win condition
+        /// </summary>
+        
         public Action<EnemyView> OnTriggerEnter;
 
         [SerializeField] private Transform _deliveredRoot;

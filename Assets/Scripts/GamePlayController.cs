@@ -26,7 +26,7 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private GamePlayConfig _config;
 
     private EnemyAISystem _enemyAI;
-    private PlayerController _playerController;
+    private PlayerView _playerView;
     private ObjectPool _objectPool;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
     private int _enemiesCount;
@@ -73,18 +73,18 @@ public class GamePlayController : MonoBehaviour
 
     private void CreatePlayer()
     {
-        if (_playerController == null)
+        if (_playerView == null)
         {
             var player = Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity, _playerAndEnemyRoot);
-            _playerController = player.GetComponent<PlayerController>();
+            _playerView = player.GetComponent<PlayerView>();
         }
 
-        _playerController.SetData(_config.maxCollectEnemyCount);
+        _playerView.SetData(_config.maxCollectEnemyCount);
     }
 
     private void CreateField()
     {
-        _fieldController.CreateField(Camera.main, _playerController);
+        _fieldController.CreateField(Camera.main, _playerView);
         _yardManager.SetData(EnemyDelivered, _objectPool);
     }
 
@@ -113,7 +113,7 @@ public class GamePlayController : MonoBehaviour
         if (_enemyViews.Contains(view))
         {
             _enemyViews.Remove(view);
-            _playerController.EnemyDelivered(view);
+            _playerView.EnemyDelivered(view);
             
             AddScore();
         }

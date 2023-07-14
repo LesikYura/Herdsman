@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GamePlayConfig
   m_EditorClassIdentifier: 
   minEnemyCount: 5
-  maxEnemyCount: 15
+  maxEnemyCount: 20
   maxCollectEnemyCount: 5

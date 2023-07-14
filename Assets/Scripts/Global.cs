@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class Global : MonoBehaviour
 {
+    /// <summary>
+    /// App settings
+    /// Simple App launcher
+    /// Module connectivity
+    /// </summary>
+    
     public static Global Instance;
 
     [SerializeField] private GamePlayController _gamePlayController;

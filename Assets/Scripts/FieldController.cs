@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using View;
 
 public class FieldController : MonoBehaviour, IPointerClickHandler
 {
@@ -18,13 +19,13 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
     [SerializeField] private RectTransform _winZoneRect;
 
     private Camera _mainCamera;
-    private PlayerController _player;
+    private PlayerView _player;
     private Vector2 _fieldSizeHalf = Vector2.zero;
     private Bounds _bounds;
 
     private readonly int _borderShift = 50;
 
-    public void CreateField(Camera mainCamera, PlayerController player)
+    public void CreateField(Camera mainCamera, PlayerView player)
     {
         _mainCamera = mainCamera;
         _player = player;

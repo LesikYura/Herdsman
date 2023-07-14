@@ -14,6 +14,8 @@ public abstract class Movable : MonoBehaviour
     
     protected readonly float MoveSpeed = 2f;
     
+    protected abstract void Move();
+    
     private void Update()
     {
         Move();
@@ -29,6 +31,4 @@ public abstract class Movable : MonoBehaviour
         TargetTransform = targetTransform;
         IsBaseMoving = false;
     }
-
-    protected abstract void Move();
 }

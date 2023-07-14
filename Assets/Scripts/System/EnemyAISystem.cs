@@ -12,11 +12,11 @@ public class EnemyAISystem
     
     private List<EnemyView> _enemyViews = new List<EnemyView>();
     private Bounds _bounds;
-
-    private readonly float _minDelay = 1f;
-    private readonly float _maxDelay = 3f;
-    private readonly float _maxStep = 100f;
     private Coroutine _moveRandomItems;
+
+    private readonly float _minDelay = 2f;
+    private readonly float _maxDelay = 5f;
+    private readonly float _maxStep = 200f;
 
     public void SetData(List<EnemyView> enemyViews, Bounds bounds)
     {
