@@ -32,6 +32,7 @@ public class GamePlayController : MonoBehaviour
     private EnemyMaker _enemyMaker;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
     private int _enemiesDeliveredCount;
+    private int _allEnemiesOnScene;
 
     private GameState _gameState;
     
@@ -69,7 +70,7 @@ public class GamePlayController : MonoBehaviour
 
     private void SetHUDManager()
     {
-        _hudManager.SetData(_enemyViews.Count, NextLevel);
+        _hudManager.SetData(_allEnemiesOnScene, NextLevel);
     }
 
     private void CreatePlayer()
@@ -95,6 +96,7 @@ public class GamePlayController : MonoBehaviour
 
         _enemiesDeliveredCount = 0;
         _enemyMaker.AddEnemies(_enemyViews, Random.Range(_config.minEnemyCount, _config.maxEnemyCount));
+        _allEnemiesOnScene += _enemyViews.Count;
 
         StartCoroutine(AddEnemiesRoutine());
     }
@@ -108,7 +110,8 @@ public class GamePlayController : MonoBehaviour
                 count = _config.maxEnemyCountOnScene - _enemyViews.Count;
             
             _enemyMaker.AddEnemies(_enemyViews, count);
-            _hudManager.UpdateScore(_enemiesDeliveredCount,_enemyViews.Count);
+            _allEnemiesOnScene += count;
+            _hudManager.UpdateScore(_enemiesDeliveredCount,_allEnemiesOnScene);
         }
     }
     
