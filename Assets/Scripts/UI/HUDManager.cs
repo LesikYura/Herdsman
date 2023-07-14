@@ -24,6 +24,12 @@ public class HUDManager : MonoBehaviour
     {
         _score.text = $"{score}/{_maxScore}";
     }
+    
+    public void UpdateScore(int score, int maxScore)
+    {
+        _maxScore = maxScore;
+        _score.text = $"{score}/{_maxScore}";
+    }
 
     public void NewLevelButtonClick()
     {

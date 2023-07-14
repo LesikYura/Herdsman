@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CoreSystem;
 using Data;
 using UnityEngine;
 using View;
@@ -25,11 +26,11 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private HUDManager _hudManager;
     [SerializeField] private GamePlayConfig _config;
 
-    private EnemyAISystem _enemyAI;
+    private EnemyAI _enemyAI;
     private PlayerView _playerView;
     private ObjectPool _objectPool;
+    private EnemyMaker _enemyMaker;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
-    private int _enemiesCount;
     private int _enemiesDeliveredCount;
 
     private GameState _gameState;
@@ -44,7 +45,7 @@ public class GamePlayController : MonoBehaviour
         CreateEnemy();
         CreateAI();
         SetHUDManager();
-        
+
         _gameState = GameState.Play;
     }
 
@@ -68,7 +69,7 @@ public class GamePlayController : MonoBehaviour
 
     private void SetHUDManager()
     {
-        _hudManager.SetData(_enemiesCount, NextLevel);
+        _hudManager.SetData(_enemyViews.Count, NextLevel);
     }
 
     private void CreatePlayer()
@@ -90,22 +91,32 @@ public class GamePlayController : MonoBehaviour
 
     private void CreateEnemy()
     {
+        _enemyMaker ??= new EnemyMaker(_objectPool, _fieldController);
+
         _enemiesDeliveredCount = 0;
-        _enemiesCount = Random.Range(_config.minEnemyCount, _config.maxEnemyCount);
-        for (var i = 0; i < _enemiesCount; i++)
+        _enemyMaker.AddEnemies(_enemyViews, Random.Range(_config.minEnemyCount, _config.maxEnemyCount));
+
+        StartCoroutine(AddEnemiesRoutine());
+    }
+
+    private void AddEnemy()
+    {
+        if (_enemyViews.Count < _config.maxEnemyCountOnScene)
         {
-            var enemy = _objectPool.GetObjectFromPool();
-            var enemyView = enemy.GetComponent<EnemyView>();
-            enemyView.SetData(_fieldController.GetSpawnPosition());
+            var count = Random.Range(_config.minAddEnemyCount, _config.maxAddEnemyCount);
+            if (_enemyViews.Count + count > _config.maxEnemyCountOnScene)
+                count = _config.maxEnemyCountOnScene - _enemyViews.Count;
             
-            _enemyViews.Add(enemyView);
+            _enemyMaker.AddEnemies(_enemyViews, count);
+            _hudManager.UpdateScore(_enemiesDeliveredCount,_enemyViews.Count);
         }
     }
     
+
     private void CreateAI()
     {
-        _enemyAI ??= new EnemyAISystem();
-        _enemyAI.SetData(_enemyViews, _fieldController.Bounds);
+        _enemyAI ??= new EnemyAI();
+        _enemyAI.SetData(_enemyViews, _fieldController.Bounds, _config);
     }
     
     private void EnemyDelivered(EnemyView view)
@@ -129,10 +140,20 @@ public class GamePlayController : MonoBehaviour
 
     private void CheckEndGame()
     {
-        if (_enemiesCount == _enemiesDeliveredCount)
+        if (_enemyViews.Count == _enemiesDeliveredCount)
         {
             onGameEnd?.Invoke();
             _gameState = GameState.End;
+        }
+    }
+    
+    private System.Collections.IEnumerator AddEnemiesRoutine()
+    {
+        yield return new WaitForSeconds(_config.startDelay);
+        while (true)
+        {
+            AddEnemy();
+            yield return new WaitForSeconds(Random.Range(_config.minAddEnemiesDelay, _config.maxAddEnemiesDelay));
         }
     }
     
