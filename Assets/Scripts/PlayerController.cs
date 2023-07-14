@@ -41,4 +41,19 @@ public class PlayerController : Movable
             }
         }
     }
+
+    protected override void Move()
+    {
+        if (IsBaseMoving)
+        {
+            var offset = transform.position - TargetPosition;
+            icon.transform.localScale = new Vector3(offset.x < 0 ? 1 : -1, 1, 1);
+            
+            transform.position = Vector3.Lerp(transform.position, TargetPosition, MoveSpeed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, TargetPosition) < 0.1f)
+            {
+                IsBaseMoving = false;
+            }
+        }
+    }
 }

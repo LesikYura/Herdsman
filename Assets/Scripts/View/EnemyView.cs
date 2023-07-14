@@ -1,7 +1,6 @@
 using System;
 using Data;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace View
 {
@@ -39,26 +38,60 @@ namespace View
 
         protected override void Move()
         {
-            if (State == EnemyState.Move || State == EnemyState.MoveToSafeArea)
+            switch (State)
             {
-                var offset = transform.position - TargetTransform.position;
-                var distance = offset.magnitude;
-                if (distance > _distance)
+                case EnemyState.Ready when TargetTransform == null:
+                    BaseMove();
+                    break;
+                
+                case EnemyState.Move:
+                case EnemyState.MoveToSafeArea:
                 {
-                    transform.position = Vector3.Lerp(
-                        transform.position, 
-                        TargetTransform.position, 
-                        MoveSpeed * Time.deltaTime);
-                    
-                    icon.transform.localScale = new Vector3(offset.x < 0 ? -1 : 1, 1, 1);
+                    Follow();
+                    break;
                 }
-                else
+                
+                case EnemyState.Delivered:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Follow()
+        {
+            var offset = transform.position - TargetTransform.position;
+            var distance = offset.magnitude;
+            if (distance > _distance)
+            {
+                transform.position = Vector3.Lerp(
+                    transform.position,
+                    TargetTransform.position,
+                    MoveSpeed * Time.deltaTime);
+                
+                icon.transform.localScale = new Vector3(offset.x < 0 ? -1 : 1, 1, 1);
+            }
+            else
+            {
+                if (State == EnemyState.MoveToSafeArea)
                 {
-                    if (State == EnemyState.MoveToSafeArea)
-                    {
-                        _onComplete?.Invoke();
-                        State = EnemyState.Delivered;
-                    }
+                    _onComplete?.Invoke();
+                    State = EnemyState.Delivered;
+                }
+            }
+        }
+
+        private void BaseMove()
+        {
+            if (IsBaseMoving)
+            {
+                var offset = transform.localPosition - TargetPosition;
+                icon.transform.localScale = new Vector3(offset.x < 0 ? -1 : 1, 1, 1);
+                
+                transform.localPosition = Vector3.Lerp(transform.localPosition, TargetPosition, MoveSpeed * Time.deltaTime);
+                if (Vector3.Distance(transform.localPosition, TargetPosition) < 0.1f)
+                {
+                    IsBaseMoving = false;
                 }
             }
         }

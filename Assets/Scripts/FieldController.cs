@@ -10,6 +10,8 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
     /// Set bounds
     /// Get spawn position
     /// </summary>
+
+    public Bounds Bounds => _bounds;
     
     [SerializeField] private BoxCollider _boxCollider;
     [SerializeField] private CanvasScaler _canvasScaler;
@@ -20,7 +22,7 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
     private Vector2 _fieldSizeHalf = Vector2.zero;
     private Bounds _bounds;
 
-    private readonly int _bordedShift = 50;
+    private readonly int _borderShift = 50;
 
     public void CreateField(Camera mainCamera, PlayerController player)
     {
@@ -53,10 +55,10 @@ public class FieldController : MonoBehaviour, IPointerClickHandler
         _boxCollider.size = fieldSize;
         _fieldSizeHalf = new Vector2(fieldSize.x / 2, fieldSize.y / 2);
 
-        var minX = -_fieldSizeHalf.x + _bordedShift;
-        var maxX = _fieldSizeHalf.x - _winZoneRect.rect.width - _bordedShift;
-        var minY = -_fieldSizeHalf.y + _bordedShift;
-        var maxY = _fieldSizeHalf.y - _bordedShift;
+        var minX = -_fieldSizeHalf.x + _borderShift;
+        var maxX = _fieldSizeHalf.x - _winZoneRect.rect.width - _borderShift;
+        var minY = -_fieldSizeHalf.y + _borderShift;
+        var maxY = _fieldSizeHalf.y - _borderShift;
         _bounds = new Bounds();
         _bounds.SetMinMax(new Vector2(minX, minY), new Vector2(maxX, maxY));
     }

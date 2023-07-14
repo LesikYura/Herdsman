@@ -24,7 +24,8 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private YardManager _yardManager;
     [SerializeField] private HUDManager _hudManager;
     [SerializeField] private GamePlayConfig _config;
-    
+
+    private EnemyAISystem _enemyAI;
     private PlayerController _playerController;
     private ObjectPool _objectPool;
     private List<EnemyView> _enemyViews = new List<EnemyView>();
@@ -33,10 +34,6 @@ public class GamePlayController : MonoBehaviour
 
     private GameState _gameState;
     
-    /*// todo move to config
-    private readonly int _minEnemyCount = 5;
-    private readonly int _maxEnemyCount = 15;
-    private readonly int _maxCollectEnemyCount = 5;*/
     public void StartGame()
     {
         _gameState = GameState.Loading;
@@ -45,6 +42,7 @@ public class GamePlayController : MonoBehaviour
         CreatePlayer();
         CreateField();
         CreateEnemy();
+        CreateAI();
         SetHUDManager();
         
         _gameState = GameState.Play;
@@ -102,6 +100,12 @@ public class GamePlayController : MonoBehaviour
             
             _enemyViews.Add(enemyView);
         }
+    }
+    
+    private void CreateAI()
+    {
+        _enemyAI ??= new EnemyAISystem();
+        _enemyAI.SetData(_enemyViews, _fieldController.Bounds);
     }
     
     private void EnemyDelivered(EnemyView view)
