@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CoreSystem;
 using Data;
+using UI;
 using UnityEngine;
 using View;
 using Random = UnityEngine.Random;
@@ -35,6 +36,7 @@ public class GamePlayController : MonoBehaviour
     private int _allEnemiesOnScene;
 
     private GameState _gameState;
+    private Coroutine _addEnemiesRoutine;
     
     public void StartGame()
     {
@@ -54,6 +56,7 @@ public class GamePlayController : MonoBehaviour
     {
         CheckCompleteLevel();
         _yardManager.CheckCompleteLevel(GetObjectPool());
+        _allEnemiesOnScene = 0;
         StartGame();
     }
 
@@ -98,7 +101,12 @@ public class GamePlayController : MonoBehaviour
         _enemyMaker.AddEnemies(_enemyViews, Random.Range(_config.minEnemyCount, _config.maxEnemyCount));
         _allEnemiesOnScene += _enemyViews.Count;
 
-        StartCoroutine(AddEnemiesRoutine());
+        if (_addEnemiesRoutine != null)
+        {
+            StopCoroutine(_addEnemiesRoutine);
+            _addEnemiesRoutine = null;
+        }
+        _addEnemiesRoutine = StartCoroutine(AddEnemiesRoutine());
     }
 
     private void AddEnemy()
@@ -126,9 +134,8 @@ public class GamePlayController : MonoBehaviour
     {
         if (_enemyViews.Contains(view))
         {
-            _enemyViews.Remove(view);
-            _playerView.EnemyDelivered(view);
-            
+            _enemyViews.Remove(view);            
+            _playerView.EnemyDelivered();
             AddScore();
         }
     }

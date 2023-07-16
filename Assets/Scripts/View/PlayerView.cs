@@ -18,13 +18,14 @@ namespace View
         {
             _maxCollectEnemyCount = maxCollectEnemyCount;
             transform.localPosition = Vector3.zero;
+            _collectedEnemies = new List<EnemyView>();
         }
 
-        public void EnemyDelivered(EnemyView view)
+        public void EnemyDelivered()
         {
-            if (_collectedEnemies.Contains(view))
+            if (_collectedEnemies.Count > 0)
             {
-                _collectedEnemies.Remove(view);
+                _collectedEnemies.Clear();
             }
         }
 

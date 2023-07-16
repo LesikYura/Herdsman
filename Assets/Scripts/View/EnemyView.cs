@@ -15,7 +15,9 @@ namespace View
 
         private Action _onComplete;
         private Vector3 _previousPosition;
+        
         private readonly float _distance = 0.5f;
+        private readonly float _minDistance = 0.1f;
 
         public void SetData(Vector2 startPosition)
         {
@@ -89,7 +91,7 @@ namespace View
                 icon.transform.localScale = new Vector3(offset.x < 0 ? -1 : 1, 1, 1);
                 
                 transform.localPosition = Vector3.Lerp(transform.localPosition, TargetPosition, MoveSpeed * Time.deltaTime);
-                if (Vector3.Distance(transform.localPosition, TargetPosition) < 0.1f)
+                if (Vector3.Distance(transform.localPosition, TargetPosition) < _minDistance)
                 {
                     IsBaseMoving = false;
                 }
