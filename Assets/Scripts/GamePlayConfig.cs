@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GamePlayConfig", menuName = "Config/GamePlayConfig")]
@@ -19,4 +21,13 @@ public class GamePlayConfig : ScriptableObject
     public float maxAddEnemiesDelay = 10f;
     public int minAddEnemyCount = 1;
     public int maxAddEnemyCount = 5;
+
+    [Header("Level data")] 
+    public List<LevelConfig> _LevelConfigs = new List<LevelConfig>();
+}
+
+[Serializable]
+public class LevelConfig
+{
+    public int collectedCountOnLevel;
 }

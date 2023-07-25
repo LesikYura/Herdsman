@@ -11,26 +11,30 @@ namespace UI
         ///  Show restart button
         /// </summary>
     
-        [SerializeField] private TextMeshProUGUI _score;
+        [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _levelText;
 
         private Action _onNextLevelButtonClick;
         private int _maxScore;
-        public void SetData(int maxScore, Action onNextLevelButtonClick)
+        private int _levelIndex;
+        public void SetData(int maxScore, int levelIndex, Action onNextLevelButtonClick)
         {
             _maxScore = maxScore;
             _onNextLevelButtonClick = onNextLevelButtonClick;
+            _levelIndex = levelIndex;
             UpdateScore(0);
         }
 
         public void UpdateScore(int score)
         {
-            _score.text = $"{score}/{_maxScore}";
+            _scoreText.text = $"{score}/{_maxScore}";
+            _levelText.text = $"Level {_levelIndex + 1}";
         }
     
         public void UpdateScore(int score, int maxScore)
         {
             _maxScore = maxScore;
-            _score.text = $"{score}/{_maxScore}";
+            UpdateScore(score);
         }
 
         public void NewLevelButtonClick()

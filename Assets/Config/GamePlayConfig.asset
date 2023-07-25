@@ -14,4 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minEnemyCount: 5
   maxEnemyCount: 20
+  maxEnemyCountOnScene: 40
   maxCollectEnemyCount: 5
+  minDelay: 2
+  maxDelay: 5
+  maxStep: 200
+  startDelay: 5
+  minAddEnemiesDelay: 5
+  maxAddEnemiesDelay: 10
+  minAddEnemyCount: 1
+  maxAddEnemyCount: 5
+  _LevelConfigs:
+  - collectedCountOnLevel: 20
+  - collectedCountOnLevel: 30
+  - collectedCountOnLevel: 40
+  - collectedCountOnLevel: 50
+  - collectedCountOnLevel: 60

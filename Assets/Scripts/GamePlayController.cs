@@ -18,6 +18,7 @@ public class GamePlayController : MonoBehaviour
     /// </summary>
 
     public Action onGameEnd;
+    public Action onLevelEnd;
 
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _enemyPrefab;
@@ -34,15 +35,19 @@ public class GamePlayController : MonoBehaviour
     private List<EnemyView> _enemyViews = new List<EnemyView>();
     private int _enemiesDeliveredCount;
     private int _allEnemiesOnScene;
+    private int _levelIndex = 0;
 
     private GameState _gameState;
     private Coroutine _addEnemiesRoutine;
+    private LevelConfig _level;
+    
     
     public void StartGame()
     {
         _gameState = GameState.Loading;
         _objectPool = GetObjectPool();
-        
+
+        SetLevelData();
         CreatePlayer();
         CreateField();
         CreateEnemy();
@@ -52,8 +57,23 @@ public class GamePlayController : MonoBehaviour
         _gameState = GameState.Play;
     }
 
+    private void SetLevelData()
+    {
+        if (_levelIndex >= _config._LevelConfigs.Count)
+        {
+            _levelIndex = 0;
+        }
+
+        _level = _config._LevelConfigs[_levelIndex];
+
+    }
+
     private void NextLevel()
     {
+        _levelIndex++;
+        if (_levelIndex >= _config._LevelConfigs.Count)
+            _gameState = GameState.EndGame;
+        
         CheckCompleteLevel();
         _yardManager.CheckCompleteLevel(GetObjectPool());
         _allEnemiesOnScene = 0;
@@ -73,7 +93,7 @@ public class GamePlayController : MonoBehaviour
 
     private void SetHUDManager()
     {
-        _hudManager.SetData(_allEnemiesOnScene, NextLevel);
+        _hudManager.SetData(_allEnemiesOnScene, _levelIndex, NextLevel);
     }
 
     private void CreatePlayer()
@@ -145,15 +165,17 @@ public class GamePlayController : MonoBehaviour
         _enemiesDeliveredCount++;
         _hudManager.UpdateScore(_enemiesDeliveredCount);
 
-        CheckEndGame();
+        CheckEndLevel();
     }
 
-    private void CheckEndGame()
+    private void CheckEndLevel()
     {
-        if (_enemyViews.Count == _enemiesDeliveredCount)
+        if (_level.collectedCountOnLevel == _enemiesDeliveredCount)
         {
-            onGameEnd?.Invoke();
-            _gameState = GameState.End;
+            _gameState = GameState.EndLevel;
+            onLevelEnd?.Invoke();
+            Debug.Log($"Level {_levelIndex} COMPLETED!");
+            NextLevel();
         }
     }
     

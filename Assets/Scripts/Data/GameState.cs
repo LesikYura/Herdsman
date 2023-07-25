@@ -4,6 +4,7 @@ namespace Data
     {
         Loading = 0,
         Play,
-        End
+        EndLevel,
+        EndGame
     }
 }
