@@ -104,7 +104,7 @@ public class GamePlayController : MonoBehaviour
             _playerView = player.GetComponent<PlayerView>();
         }
 
-        _playerView.SetData(_config.maxCollectEnemyCount);
+        _playerView.SetData(_config.maxCollectEnemyCount, _config.playerSpeed);
     }
 
     private void CreateField()
@@ -175,6 +175,7 @@ public class GamePlayController : MonoBehaviour
             _gameState = GameState.EndLevel;
             onLevelEnd?.Invoke();
             Debug.Log($"Level {_levelIndex} COMPLETED!");
+            
             NextLevel();
         }
     }

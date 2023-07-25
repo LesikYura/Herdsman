@@ -14,11 +14,12 @@ namespace View
         private List<EnemyView> _collectedEnemies = new List<EnemyView>();
         private int _maxCollectEnemyCount;
 
-        public void SetData(int maxCollectEnemyCount)
+        public void SetData(int maxCollectEnemyCount, float moveSpeed)
         {
             _maxCollectEnemyCount = maxCollectEnemyCount;
             transform.localPosition = Vector3.zero;
             _collectedEnemies = new List<EnemyView>();
+            MoveSpeed = moveSpeed;
         }
 
         public void EnemyDelivered()
@@ -51,8 +52,8 @@ namespace View
             {
                 var offset = transform.position - TargetPosition;
                 icon.transform.localScale = new Vector3(offset.x < 0 ? 1 : -1, 1, 1);
-            
-                transform.position = Vector3.Lerp(transform.position, TargetPosition, MoveSpeed * Time.deltaTime);
+                
+                transform.position = Vector3.MoveTowards(transform.position, TargetPosition, Time.deltaTime * MoveSpeed);
                 if (Vector3.Distance(transform.position, TargetPosition) < 0.1f)
                 {
                     IsBaseMoving = false;

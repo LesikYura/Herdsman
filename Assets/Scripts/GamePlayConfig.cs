@@ -22,6 +22,9 @@ public class GamePlayConfig : ScriptableObject
     public int minAddEnemyCount = 1;
     public int maxAddEnemyCount = 5;
 
+    [Header("Player")] 
+    public float playerSpeed = 4f;
+
     [Header("Level data")] 
     public List<LevelConfig> _LevelConfigs = new List<LevelConfig>();
 }

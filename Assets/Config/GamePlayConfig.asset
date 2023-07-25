@@ -24,6 +24,7 @@ MonoBehaviour:
   maxAddEnemiesDelay: 10
   minAddEnemyCount: 1
   maxAddEnemyCount: 5
+  playerSpeed: 4
   _LevelConfigs:
   - collectedCountOnLevel: 20
   - collectedCountOnLevel: 30

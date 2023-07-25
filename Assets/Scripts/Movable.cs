@@ -8,11 +8,11 @@ public abstract class Movable : MonoBehaviour
     /// </summary>
     
     [SerializeField] protected Image icon;
+    
     protected Transform TargetTransform;
     protected Vector3 TargetPosition;
     protected bool IsBaseMoving = false;
-    
-    protected readonly float MoveSpeed = 2f;
+    protected float MoveSpeed = 2f;
     
     protected abstract void Move();
     
