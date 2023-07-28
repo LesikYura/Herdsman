@@ -25,7 +25,7 @@ MonoBehaviour:
   minAddEnemyCount: 1
   maxAddEnemyCount: 5
   playerSpeed: 4
-  _LevelConfigs:
+  levelConfigs:
   - collectedCountOnLevel: 20
   - collectedCountOnLevel: 30
   - collectedCountOnLevel: 40

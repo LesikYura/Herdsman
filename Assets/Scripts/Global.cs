@@ -8,7 +8,7 @@ public class Global : MonoBehaviour
     /// Module connectivity
     /// </summary>
     
-    public static Global Instance;
+    public static Global Instance { get; private set; }
 
     [SerializeField] private GamePlayController _gamePlayController;
     

@@ -59,19 +59,19 @@ public class GamePlayController : MonoBehaviour
 
     private void SetLevelData()
     {
-        if (_levelIndex >= _config._LevelConfigs.Count)
+        if (_levelIndex >= _config.levelConfigs.Count)
         {
             _levelIndex = 0;
         }
 
-        _level = _config._LevelConfigs[_levelIndex];
+        _level = _config.levelConfigs[_levelIndex];
 
     }
 
     private void NextLevel()
     {
         _levelIndex++;
-        if (_levelIndex >= _config._LevelConfigs.Count)
+        if (_levelIndex >= _config.levelConfigs.Count)
             _gameState = GameState.EndGame;
         
         CheckCompleteLevel();

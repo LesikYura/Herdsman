@@ -11,6 +11,8 @@ namespace UI
         ///  Show restart button
         /// </summary>
     
+        // todo Timer - use StringBuilder
+        
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _levelText;
 

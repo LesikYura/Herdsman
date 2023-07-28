@@ -26,7 +26,7 @@ public class GamePlayConfig : ScriptableObject
     public float playerSpeed = 4f;
 
     [Header("Level data")] 
-    public List<LevelConfig> _LevelConfigs = new List<LevelConfig>();
+    public List<LevelConfig> levelConfigs = new List<LevelConfig>();
 }
 
 [Serializable]
